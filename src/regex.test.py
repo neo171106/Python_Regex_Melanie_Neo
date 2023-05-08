@@ -8,7 +8,7 @@ TypeDomain = input("Gib die Domain deiner E-Mail-Adresse ein (z.B. gmail.com): "
 SecondDomain = input("Möchten Sie eine weitere Domain hinzufügen? (ja/nein): ")
 
 # Add second domain if user input is 'ja'
-if SecondDomain.lower() == "ja":
+if SecondDomain == "ja":
     TypeDomain2 = input("Bitte geben Sie die zweite Domain ein: ")
 
 # Input emails
@@ -32,7 +32,10 @@ for email in Emails:
     match = re.search(domain_regex, email)
     if match:
         domain = match.group(1)
-        if domain == TypeDomain or (SecondDomain.lower() == "ja" and domain == TypeDomain2):
+        if domain == TypeDomain or domain == TypeDomain2:
             print(f'Die E-Mail-Adresse "{email}" hat eine der gewünschten Domains.')
-        else:
-            print(f'Die E-Mail-Adresse "{email}" hat nicht die gewünschte Domain.')
+
+# Print all emails
+print("Alle eingegebenen E-Mails:")
+for email in Emails:
+    print(email)
