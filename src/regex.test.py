@@ -16,13 +16,16 @@ if SecondDomain == "ja":
 TypeMoreEmails = input("Gib deine Email(s) ein, getrennt durch ein Komma: ")
 TypeMoreEmails = TypeMoreEmails.split(",")
 
-# Add the new emails to the list, removing duplicates
+# Check each email for duplicates and add to list
 for email in TypeMoreEmails:
     email = email.strip()
-    if email in Emails:
-        print(f'Die E-Mail-Adresse "{email}" wurde bereits hinzugefügt.')
+    if re.match(r"[^@]+@[^@]+\.[^@]+", email):
+        if email in Emails:
+            print(f'Die E-Mail-Adresse "{email}" wurde bereits hinzugefügt.')
+        else:
+            Emails.append(email)
     else:
-        Emails.append(email)
+        print(f'Die E-Mail-Adresse "{email}" ist ungültig.')
 
 # Check if the emails have the desired domain(s)
 for email in Emails:
