@@ -18,7 +18,7 @@ TypeMoreEmails = TypeMoreEmails.split(",")
 # Check each email for duplicates and add to list
 for email in TypeMoreEmails:
     email = email.strip()
-    if re.match(r"[^@]+@[^@]+\.[^@]+", email):
+    if re.match(r"^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+([a-zA-Z0-9]{2,})$", email):
         if email in Emails:
             print(f'Die E-Mail-Adresse "{email}" wurde bereits hinzugefügt.')
         else:
