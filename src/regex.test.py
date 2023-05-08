@@ -26,6 +26,9 @@ for email in TypeMoreEmails:
     else:
         print(f'Die E-Mail-Adresse "{email}" ist ungültig.')
 
+        #Sort the Email alphabetic
+        Emails = sorted(Emails, key=str.lower)
+
 # Check if the emails have the desired domain(s)
 for email in Emails:
     domain_regex = r"@(.+)$"
