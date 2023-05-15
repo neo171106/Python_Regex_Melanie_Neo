@@ -1,6 +1,3 @@
-
-Ancozahl der Domains:
-gmail.m: 1
-
 Anzahl der Domains:
-gmail.com: 1
+Anzahl der Domains: 0
+gmail.com: 2

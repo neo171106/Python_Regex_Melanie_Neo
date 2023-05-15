@@ -1,4 +1,5 @@
 import re
+import os
 
 # Erstelle leere Listen, um Namen und E-Mails zu speichern
 Namen = []
@@ -43,6 +44,15 @@ while True:
 
             # Überprüfe, ob die E-Mails die gewünschten Domains haben
             Domains = {}
+            if os.path.isfile('domains.txt'):
+                with open("domains.txt", "r") as f:
+                    for line in f:
+                        if ":" in line:
+                            domain, count = line.strip().split(":")
+                            if count:
+                                Domains[domain.strip()] = int(count.strip())
+                            else:
+                                Domains[domain.strip()] = 0
             for email in Emails:
                 domain_regex = r"@(.+)$"
                 match = re.search(domain_regex, email)
@@ -55,8 +65,8 @@ while True:
                     print(f'Die E-Mail-Adresse "{email}" hat die Domain "{domain}".')
 
             # Schreibe Anzahl der Domains in eine Textdatei
-            with open("domains.txt", "a") as f:
-                f.write("\nAnzahl der Domains:\n")
+            with open("domains.txt", "w") as f:
+                f.write("Anzahl der Domains:\n")
                 for domain, count in Domains.items():
                     f.write(f"{domain}: {count}\n")
 
@@ -71,5 +81,4 @@ while True:
             # Beende das Programm
             exit()
         else:
-            print("Ungültige Eingabe. Bitte geben Sie 'ja' oder 'nein' ein.")
-
+            print("Ungültige Eingabe")
