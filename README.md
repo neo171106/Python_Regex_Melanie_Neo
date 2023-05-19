@@ -3,6 +3,6 @@
 Erstelle eine Liste mit name, vorname, email
 -Text Datei einlesen -> Erstellt liste von vorname und nachname
 -Email sortieren checken ob sie doppelt sind mit regex und lowercase nach domains und diese abzählen
--Namens Liste sortiert nach buchstaben
+-Namens Liste sortiert nach buchstaben in einem txt file ausgeben
 
 Ziel: Welcher Anbieter wird am meisten genutzt?

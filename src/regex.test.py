@@ -1,5 +1,6 @@
 import re
 import os
+from collections import Counter
 
 # Erstelle leere Listen, um Namen und E-Mails zu speichern
 Namen = []
@@ -42,33 +43,42 @@ while True:
             # Sortiere die E-Mails alphabetisch
             Emails = sorted(Emails, key=str.lower)
 
-            # Überprüfe, ob die E-Mails die gewünschten Domains haben
-            Domains = {}
+            # Überprüfe, ob die E-Mails bereits in früheren Versuchen vorgekommen sind
+            duplicates = [email for email, count in Counter(Emails).items() if count > 1]
+            if duplicates:
+                print("Folgende E-Mail-Adressen sind doppelt:")
+                for email in duplicates:
+                    print(email)
+
+            # Aktualisiere die Anzahl der Domains in der Textdatei
+            Domains = Counter([re.search(r"@(.+)$", email).group(1) for email in Emails])
             if os.path.isfile('domains.txt'):
+                existing_domains = {}
                 with open("domains.txt", "r") as f:
                     for line in f:
                         if ":" in line:
                             domain, count = line.strip().split(":")
                             if count:
-                                Domains[domain.strip()] = int(count.strip())
-                            else:
-                                Domains[domain.strip()] = 0
-            for email in Emails:
-                domain_regex = r"@(.+)$"
-                match = re.search(domain_regex, email)
-                if match:
-                    domain = match.group(1)
-                    if domain not in Domains:
-                        Domains[domain] = 1
-                    else:
-                        Domains[domain] += 1
-                    print(f'Die E-Mail-Adresse "{email}" hat die Domain "{domain}".')
+                                existing_domains[domain.strip()] = int(count.strip())
 
-            # Schreibe Anzahl der Domains in eine Textdatei
-            with open("domains.txt", "w") as f:
-                f.write("Anzahl der Domains:\n")
+                # Erhöhe die Anzahl der Domains für neue E-Mails
                 for domain, count in Domains.items():
-                    f.write(f"{domain}: {count}\n")
+                    if domain in existing_domains:
+                        existing_domains[domain] += count
+                    else:
+                        existing_domains[domain] = count
+
+                # Schreibe die aktualisierte Anzahl der Domains in die Textdatei
+                with open("domains.txt", "w") as f:
+                    f.write("Anzahl der Domains:\n")
+                    for domain, count in existing_domains.items():
+                        f.write(f"{domain}: {count}\n")
+            else:
+                # Schreibe Anzahl der Domains in eine neue Textdatei
+                with open("domains.txt", "w") as f:
+                    f.write("Anzahl der Domains:\n")
+                    for domain, count in Domains.items():
+                        f.write(f"{domain}: {count}\n")
 
             # Gib alle Namen und E-Mails aus
             print("Alle eingegebenen Namen:")
