@@ -17,18 +17,16 @@ for name in TypeNamen.split(","):
     else:
         print("Ungültiger Name.")
 
-# Eingabe der E-Mail-Adresse
-TypeEmails = input("Gib deine E-Mail-Adresse(n) ein, getrennt durch ein Komma: ")
+# Eingabe der E-Mail-Adressen
+TypeEmails = input("Gib deine E-Mail-Adressen ein, getrennt durch ein Komma: ")
 TypeEmails = TypeEmails.split(",")
 
-# Überprüfe jede E-Mail-Adresse auf Gültigkeit und Duplikate und füge sie zur Liste hinzu
+# Überprüfe jede E-Mail-Adresse auf Gültigkeit und füge sie zur Liste hinzu
+Emails = []  # Leere Liste für jede Iteration
 for email in TypeEmails:
     email = email.strip()
     if re.match(r"^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+([a-zA-Z0-9]{2,})$", email):
-        if email in Emails:
-            print(f'Die E-Mail-Adresse "{email}" wurde bereits hinzugefügt.')
-        else:
-            Emails.append(email)
+        Emails.append(email)
     else:
         print(f'Die E-Mail-Adresse "{email}" ist ungültig.')
 
@@ -72,10 +70,19 @@ else:
         for domain, count in Domains.items():
             f.write(f"{domain}: {count}\n")
 
+# Schreibe Namen und E-Mails in eine neue Datei
+with open("namen_emails.txt", "a") as f:
+    for name, email in zip(Namen, Emails):
+        f.write(f"Name: {name}\n")
+        f.write(f"E-Mail-Adresse: {email}\n")
+    f.write("_________________________________________________________\n")
+
 # Gib alle Namen und E-Mails aus
-print("Alle eingegebenen Namen:")
-for name in Namen:
-    print(name)
-print("Alle eingegebenen E-Mail-Adressen:")
-for email in Emails:
-    print(email)
+print("Alle eingegebenen Namen und E-Mail-Adressen:")
+for name, email in zip(Namen, Emails):
+    print(f"Name: {name}")
+    print(f"E-Mail-Adresse: {email}")
+    print("_________________________________________________________")
+
+
+# TODO save all emails when you give the input
