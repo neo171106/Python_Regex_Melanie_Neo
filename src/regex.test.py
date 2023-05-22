@@ -1,44 +1,34 @@
 import re
 import os
-from collections import Counter
 
-# Erstelle leere Listen, um Namen und E-Mails zu speichern
-Namen = []
-Emails = []
+# Eingabe des Namens
+Name = input("Gib deinen Namen ein: ")
 
-# Eingabe gib deinen Vornamen ein. Weiter Namen getrennt durch ein Komma
-TypeNamen = input("Gib deine Namen ein: ")
+if not Name or not re.match(r"^[A-Za-z\s]+$", Name):
+    print("Ungültiger Name. Verwende nur Buchstaben und Leerzeichen.")
+    exit()
 
-# Füge Namen zur Liste hinzu
-for name in TypeNamen.split(","):
-    name = name.strip()
-    if name:
-        Namen.append(name)
-    else:
-        print("Ungültiger Name.")
+# Eingabe der E-Mail-Adresse
+Email = input("Gib deine E-Mail-Adresse ein: ")
 
-# Eingabe der E-Mail-Adressen
-TypeEmails = input("Gib deine E-Mail-Adressen ein: ")
-TypeEmails = TypeEmails.split(",")
+# Überprüfung auf ungültige E-Mail-Adresse
+if not re.match(r"^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+([a-zA-Z0-9]{2,})$", Email):
+    print(f'Die E-Mail-Adresse "{Email}" ist ungültig.')
+    exit()
 
-# Überprüfe jede E-Mail-Adresse auf Gültigkeit und füge sie zur Liste hinzu
-Emails = []  # Leere Liste für jede Iteration
-for email in TypeEmails:
-    email = email.strip()
-    if re.match(r"^([a-zA-Z0-9_.+-]+)@([a-zA-Z0-9-]+\.)+([a-zA-Z0-9]{2,})$", email):
-        Emails.append(email)
-    else:
-        print(f'Die E-Mail-Adresse "{email}" ist ungültig.')
-
-# Überprüfe, ob die E-Mails bereits in früheren Versuchen vorgekommen sind
-duplicates = [email for email, count in Counter(Emails).items() if count > 1]
-if duplicates:
-    print("Folgende E-Mail-Adressen sind doppelt:")
-    for email in duplicates:
-        print(email)
+# Überprüfung auf doppelte E-Mail-Adresse
+if os.path.isfile('namen_emails.txt'):
+    with open("namen_emails.txt", "r") as f:
+        lines = f.readlines()
+        for line in lines:
+            if "E-Mail-Adresse:" in line:
+                existing_email = line.strip().split(": ")[1]
+                if existing_email == Email:
+                    print(f'Die E-Mail-Adresse "{Email}" wurde bereits verwendet.')
+                    exit()
 
 # Aktualisiere die Anzahl der Domains in der Textdatei
-Domains = Counter([re.search(r"@(.+)$", email).group(1) for email in Emails])
+domain = re.search(r"@(.+)$", Email).group(1)
 if os.path.isfile('domains.txt'):
     existing_domains = {}
     with open("domains.txt", "r") as f:
@@ -48,12 +38,11 @@ if os.path.isfile('domains.txt'):
                 if count:
                     existing_domains[domain.strip()] = int(count.strip())
 
-    # Erhöhe die Anzahl der Domains für neue E-Mails
-    for domain, count in Domains.items():
-        if domain in existing_domains:
-            existing_domains[domain] += count
-        else:
-            existing_domains[domain] = count
+    # Erhöhe die Anzahl der Domains für neue E-Mail
+    if domain in existing_domains:
+        existing_domains[domain] += 1
+    else:
+        existing_domains[domain] = 1
 
     # Schreibe die aktualisierte Anzahl der Domains in die Textdatei
     with open("domains.txt", "w") as f:
@@ -64,19 +53,15 @@ else:
     # Schreibe Anzahl der Domains in eine neue Textdatei
     with open("domains.txt", "w") as f:
         f.write("Anzahl der Domains:\n")
-        for domain, count in Domains.items():
-            f.write(f"{domain}: {count}\n")
+        f.write(f"{domain}: 1\n")
 
-# Schreibe Namen und E-Mails in eine neue Datei
+# Schreibe Name und E-Mail-Adresse in die Datei mit Abgrenzungslinie
 with open("namen_emails.txt", "a") as f:
-    for name, email in zip(Namen, Emails):
-        f.write(f"Name: {name}\n")
-        f.write(f"E-Mail-Adresse: {email}\n")
-    f.write("_________________________________________________________\n")
+    f.write(f"Name: {Name}\n")
+    f.write(f"E-Mail-Adresse: {Email}\n")
+    f.write("----------------------------------------\n")
 
-# Gib alle Namen und E-Mails aus
-print("Alle eingegebenen Namen und E-Mail-Adressen:")
-for name, email in zip(Namen, Emails):
-    print(f"Name: {name}")
-    print(f"E-Mail-Adresse: {email}")
-    print("_________________________________________________________")
+# Gib den Namen und die E-Mail-Adresse aus
+print("Eingegebener Name und E-Mail-Adresse:")
+print(f"Name: {Name}")
+print(f"E-Mail-Adresse: {Email}")

@@ -1,3 +1,2 @@
 Anzahl der Domains:
 gmail.com: 2
-gmx.ch: 1
