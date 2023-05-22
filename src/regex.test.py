@@ -18,7 +18,7 @@ for name in TypeNamen.split(","):
         print("Ungültiger Name.")
 
 # Eingabe der E-Mail-Adressen
-TypeEmails = input("Gib deine E-Mail-Adressen ein, getrennt durch ein Komma: ")
+TypeEmails = input("Gib deine E-Mail-Adressen ein: ")
 TypeEmails = TypeEmails.split(",")
 
 # Überprüfe jede E-Mail-Adresse auf Gültigkeit und füge sie zur Liste hinzu
@@ -29,9 +29,6 @@ for email in TypeEmails:
         Emails.append(email)
     else:
         print(f'Die E-Mail-Adresse "{email}" ist ungültig.')
-
-# Sortiere die E-Mails alphabetisch
-Emails = sorted(Emails, key=str.lower)
 
 # Überprüfe, ob die E-Mails bereits in früheren Versuchen vorgekommen sind
 duplicates = [email for email, count in Counter(Emails).items() if count > 1]
@@ -83,6 +80,3 @@ for name, email in zip(Namen, Emails):
     print(f"Name: {name}")
     print(f"E-Mail-Adresse: {email}")
     print("_________________________________________________________")
-
-
-# TODO save all emails when you give the input
