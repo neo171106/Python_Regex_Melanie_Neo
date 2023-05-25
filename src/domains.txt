@@ -1,2 +1,4 @@
 Anzahl der Domains:
-gmail.com: 2
+gmail.com: 7
+hotmail.com: 1
+gmx.ch: 2
